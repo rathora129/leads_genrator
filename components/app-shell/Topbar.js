@@ -1,9 +1,9 @@
 'use client';
 import { useState } from 'react';
-import { Search, Bell, Plus, Sun, Moon, ChevronDown, Command, Maximize2 } from 'lucide-react';
+import { Search, Bell, Plus, Sun, Moon, ChevronDown, Command, Maximize2, Menu } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function Topbar() {
+export default function Topbar({ onMenu }) {
   const [ws, setWs] = useState({ name: 'Bhavya Enterprises', initials: 'BE', cat: 'Real Estate' });
   const [wsOpen, setWsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -15,7 +15,8 @@ export default function Topbar() {
   return (
     <header className="sticky top-0 z-40 backdrop-blur-xl bg-bg/70 border-b border-line">
       <div className="flex items-center gap-3 px-4 lg:px-6 h-16">
-        <div className="hidden md:flex flex-1 max-w-[520px] items-center gap-2 glass rounded-xl px-3 py-2">
+        <button onClick={onMenu} className="lg:hidden size-9 grid place-items-center rounded-xl glass hover:bg-white/5"><Menu className="size-4"/></button>
+        <div className="hidden md:flex flex-1 max-w-[520px] items-center gap-2 glass rounded-xl px-3 py-2 cursor-pointer" onClick={()=>{const ev=new KeyboardEvent('keydown',{key:'k',metaKey:true});window.dispatchEvent(ev);}}>
           <Search className="size-4 text-ink-3" />
           <input placeholder="Search leads, workspaces, CRM, reports…" className="bg-transparent flex-1 outline-none text-sm placeholder:text-ink-3" />
           <span className="hidden md:flex items-center gap-1 text-[10px] text-ink-3 border border-line rounded px-1.5 py-0.5"><Command className="size-3" />K</span>

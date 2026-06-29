@@ -3,7 +3,10 @@ import { useMemo, useState } from 'react';
 import { Card, Pill } from '@/components/ui-kit/Glass';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LEADS } from '@/lib/mockData';
-import { Search, Download, FileSpreadsheet, FileJson, Trash2, RefreshCw, Sparkles, ChevronDown, ChevronUp, ExternalLink, Mail, Phone, Globe, Star, MapPin, X, Save, ShieldAlert } from 'lucide-react';
+import Link from 'next/link';
+import FilterDrawer from '@/components/leads/FilterDrawer';
+import ReminderModal from '@/components/leads/ReminderModal';
+import { Search, Download, FileSpreadsheet, FileJson, Trash2, RefreshCw, Sparkles, ChevronDown, ChevronUp, ExternalLink, Mail, Phone, Globe, Star, MapPin, X, Save, ShieldAlert, Filter, CalendarClock } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function LeadsPage() {
@@ -15,6 +18,8 @@ export default function LeadsPage() {
   const [aiOpen, setAiOpen] = useState(false);
   const [aiRun, setAiRun] = useState(false);
   const [aiDone, setAiDone] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [reminderFor, setReminderFor] = useState(null);
   const ps = 12;
   const filtered = useMemo(() => {
     const f = rows.filter(r => (r.business + r.owner + r.email + r.city + r.category).toLowerCase().includes(q.toLowerCase()));
@@ -46,6 +51,7 @@ export default function LeadsPage() {
       <Card className="p-3">
         <div className="flex items-center gap-2 flex-wrap">
           <div className="flex-1 min-w-[220px] flex items-center gap-2 glass rounded-xl px-3 py-2"><Search className="size-4 text-ink-3"/><input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search business, owner, email, category…" className="bg-transparent flex-1 outline-none text-sm"/></div>
+          <button onClick={()=>setFilterOpen(true)} className="text-xs glass rounded-xl px-3 py-2 hover:bg-white/5 inline-flex items-center gap-1.5"><Filter className="size-3.5"/>More filters</button>
           <Pill tone="muted">{filtered.length} results</Pill>
           <Pill tone="brand">{sel.size} selected</Pill>
         </div>
@@ -63,7 +69,7 @@ export default function LeadsPage() {
               {paged.map(r => (
                 <tr key={r.id} className="border-b border-line hover:bg-white/[0.025] transition-colors">
                   <td className="px-3 py-2.5"><input type="checkbox" checked={sel.has(r.id)} onChange={()=>{const s=new Set(sel); s.has(r.id)?s.delete(r.id):s.add(r.id); setSel(s);}} className="accent-brand-500"/></td>
-                  <td className="px-3 py-2.5"><div className="flex items-center gap-2.5"><span className="size-8 rounded-lg grid place-items-center text-[11px] font-semibold text-white shrink-0" style={{background:'linear-gradient(135deg,#6E45FE,#22D3EE)'}}>{r.business.slice(0,2).toUpperCase()}</span><div className="min-w-0"><div className="font-medium truncate max-w-[200px]">{r.business}</div><div className="text-[11px] text-ink-3">{r.id}</div></div></div></td>
+                  <td className="px-3 py-2.5"><Link href={`/leads/${r.id}`} className="flex items-center gap-2.5 group/cell"><span className="size-8 rounded-lg grid place-items-center text-[11px] font-semibold text-white shrink-0" style={{background:'linear-gradient(135deg,#6E45FE,#22D3EE)'}}>{r.business.slice(0,2).toUpperCase()}</span><div className="min-w-0"><div className="font-medium truncate max-w-[200px] group-hover/cell:text-brand-300 transition-colors">{r.business}</div><div className="text-[11px] text-ink-3">{r.id}</div></div></Link></td>
                   <td className="px-3 py-2.5 text-ink-2">{r.owner}</td>
                   <td className="px-3 py-2.5">{r.phone ? <span className="inline-flex items-center gap-1.5 text-ink-2"><Phone className="size-3 text-ink-3"/>{r.phone}</span> : <span className="text-ink-4">—</span>}</td>
                   <td className="px-3 py-2.5">{r.email ? <span className="inline-flex items-center gap-1.5 text-ink-2"><Mail className="size-3 text-ink-3"/>{r.email}</span> : <span className="text-ink-4">—</span>}</td>
@@ -73,7 +79,7 @@ export default function LeadsPage() {
                   <td className="px-3 py-2.5"><Pill tone="muted">{r.category}</Pill></td>
                   <td className="px-3 py-2.5 text-ink-2"><span className="inline-flex items-center gap-1.5"><MapPin className="size-3 text-ink-3"/>{r.address}</span></td>
                   <td className="px-3 py-2.5"><Pill tone={r.hot?'rose':'muted'}>{r.status}</Pill></td>
-                  <td className="px-3 py-2.5"><a href={r.maps} target="_blank" rel="noreferrer" className="text-ink-3 hover:text-white"><ExternalLink className="size-3.5"/></a></td>
+                  <td className="px-3 py-2.5"><div className="flex items-center gap-1"><button onClick={()=>setReminderFor(r)} className="size-7 rounded-lg hover:bg-white/5 grid place-items-center text-ink-3 hover:text-accent-amber" title="Call later"><CalendarClock className="size-3.5"/></button><a href={r.maps} target="_blank" rel="noreferrer" className="size-7 rounded-lg hover:bg-white/5 grid place-items-center text-ink-3 hover:text-white" title="Open in Maps"><ExternalLink className="size-3.5"/></a></div></td>
                 </tr>
               ))}
             </tbody>
@@ -98,6 +104,8 @@ export default function LeadsPage() {
           </motion.div>
         )}
       </AnimatePresence>
+      <FilterDrawer open={filterOpen} onClose={()=>setFilterOpen(false)} onApply={(v)=>toast.success('Filters applied', { description: `${v.toggles.length} refinements` })} />
+      <ReminderModal open={!!reminderFor} onClose={()=>setReminderFor(null)} lead={reminderFor} />
     </div>
   );
 }
