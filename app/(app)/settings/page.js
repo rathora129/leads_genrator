@@ -1,0 +1,32 @@
+'use client';
+import { useState } from 'react';
+import { Card, Pill } from '@/components/ui-kit/Glass';
+import { User, Building2, Palette, Bell, KeyRound, AlertTriangle, Check, Copy, Plus } from 'lucide-react';
+import { toast } from 'sonner';
+
+const TABS = [{k:'profile',l:'Profile',i:User},{k:'workspace',l:'Workspace',i:Building2},{k:'theme',l:'Theme',i:Palette},{k:'notif',l:'Notifications',i:Bell},{k:'api',l:'API Keys',i:KeyRound},{k:'danger',l:'Danger Zone',i:AlertTriangle}];
+const THEMES = [['#6E45FE','Royal Violet'],['#22D3EE','Cyber Cyan'],['#34D399','Emerald'],['#F472B6','Rose'],['#FBBF24','Amber'],['#FB7185','Coral']];
+
+export default function Settings() {
+  const [tab, setTab] = useState('profile');
+  const [theme, setTheme] = useState('#6E45FE');
+  return (
+    <div className="space-y-5">
+      <div><div className="flex gap-2"><Pill tone="brand">Settings</Pill></div><h1 className="mt-3 text-3xl font-semibold tracking-tight">Settings</h1><p className="text-ink-3 text-sm mt-1">Manage your account, workspace, theme and integrations.</p></div>
+      <div className="grid lg:grid-cols-[240px_1fr] gap-5">
+        <Card className="p-2 h-fit lg:sticky lg:top-20">{TABS.map(t=>(<button key={t.k} onClick={()=>setTab(t.k)} className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm ${tab===t.k?'bg-white/[0.06] text-white':'text-ink-2 hover:text-white hover:bg-white/[0.03]'}`}><t.i className="size-4"/>{t.l}</button>))}</Card>
+        <div className="space-y-4">
+          {tab==='profile' && (<Card className="p-6 space-y-5"><Row label="Avatar"><div className="flex items-center gap-4"><span className="size-16 rounded-2xl bg-aurora grid place-items-center text-xl font-semibold">VS</span><button className="text-xs glass rounded-xl px-3 py-2 hover:bg-white/5">Upload new</button></div></Row><Row label="Full name"><Input v="Vikram Singh Rathore"/></Row><Row label="Email"><Input v="vikram@rocketship.ai"/></Row><Row label="Phone"><Input v="+91 98765 43210"/></Row><Row label="Role"><Input v="Chief Executive Officer"/></Row><div className="flex justify-end"><SaveBtn/></div></Card>)}
+          {tab==='workspace' && (<Card className="p-6 space-y-5"><Row label="Business name"><Input v="Bhavya Enterprises"/></Row><Row label="Category"><Input v="Real Estate · Brokerage"/></Row><Row label="Website"><Input v="bhavya.estate"/></Row><Row label="WhatsApp"><Input v="+91 98765 43210"/></Row><Row label="Target country"><Input v="India"/></Row><Row label="Target city"><Input v="Mumbai"/></Row><Row label="Description"><textarea defaultValue="Premium real estate brokerage specializing in luxury properties." className="w-full bg-transparent outline-none text-sm resize-none" rows={3}/></Row><div className="flex justify-end"><SaveBtn/></div></Card>)}
+          {tab==='theme' && (<Card className="p-6"><div className="text-sm font-semibold mb-1">Workspace color</div><div className="text-xs text-ink-3 mb-5">Used across charts, badges and accents.</div><div className="grid grid-cols-3 md:grid-cols-6 gap-3">{THEMES.map(([c,n])=>(<button key={c} onClick={()=>setTheme(c)} className={`glass rounded-2xl p-4 text-left ${theme===c?'ring-2 ring-brand-500':''}`}><span className="size-8 rounded-lg block" style={{background:c}}/><div className="mt-2 text-xs font-medium">{n}</div>{theme===c && <Check className="size-3.5 text-brand-300 mt-1"/>}</button>))}</div></Card>)}
+          {tab==='notif' && (<Card className="p-6 space-y-3">{['New leads matched','Call reminders','Daily AI digest','Workspace invites','Billing alerts','Product updates'].map(l=>(<label key={l} className="flex items-center justify-between p-3 glass rounded-xl"><div><div className="text-sm font-medium">{l}</div><div className="text-[11px] text-ink-3">Email + in-app</div></div><input type="checkbox" defaultChecked className="size-4 accent-brand-500"/></label>))}</Card>)}
+          {tab==='api' && (<Card className="p-6"><div className="flex items-center justify-between mb-4"><div><div className="text-sm font-semibold">API keys</div><div className="text-xs text-ink-3">Use these to integrate RocketShip with your stack.</div></div><button className="text-xs rounded-xl bg-brand-500 hover:bg-brand-600 text-white px-3 py-2 inline-flex items-center gap-1.5"><Plus className="size-3.5"/>New key</button></div><div className="space-y-2">{[['Production','rks_live_***************Hf72'],['Staging','rks_test_***************q1aP']].map(([n,k])=>(<div key={n} className="glass rounded-xl p-4 flex items-center justify-between"><div><div className="text-sm font-medium">{n}</div><div className="text-xs text-ink-3 font-mono">{k}</div></div><button onClick={()=>{navigator.clipboard.writeText(k); toast.success('Key copied');}} className="text-xs glass rounded-lg px-2.5 py-1.5 inline-flex items-center gap-1.5"><Copy className="size-3"/>Copy</button></div>))}</div></Card>)}
+          {tab==='danger' && (<Card className="p-6 border-accent-rose/30"><div className="text-sm font-semibold text-accent-rose flex items-center gap-2"><AlertTriangle className="size-4"/>Danger Zone</div><div className="text-xs text-ink-3 mt-1">Irreversible actions. Proceed with caution.</div>{[['Transfer workspace','Move ownership to another teammate.','Transfer'],['Export everything','Get a zip of all data in this workspace.','Export'],['Delete workspace','Permanently delete this workspace and its data.','Delete']].map(([t,d,b])=>(<div key={t} className="mt-4 flex items-center justify-between p-4 rounded-xl border border-accent-rose/20"><div><div className="text-sm font-medium">{t}</div><div className="text-xs text-ink-3">{d}</div></div><button className="text-xs rounded-xl bg-accent-rose/15 text-accent-rose hover:bg-accent-rose/25 px-3 py-2">{b}</button></div>))}</Card>)}
+        </div>
+      </div>
+    </div>
+  );
+}
+function Row({ label, children }) { return (<div className="grid md:grid-cols-[180px_1fr] gap-3 items-center"><label className="text-xs uppercase tracking-[0.14em] text-ink-3 font-medium">{label}</label><div className="glass rounded-xl px-3 py-2.5">{children}</div></div>); }
+function Input({ v }) { return <input defaultValue={v} className="w-full bg-transparent outline-none text-sm"/>; }
+function SaveBtn() { return <button onClick={()=>toast.success('Saved')} className="rounded-xl bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold px-4 py-2 shadow-glow">Save changes</button>; }
