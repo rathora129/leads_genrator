@@ -4,6 +4,7 @@ import { TrendingUp, TrendingDown, Sparkles, Flame, PhoneCall, CalendarClock, Us
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid, PieChart, Pie, Cell } from 'recharts';
 import { KPIS, REVENUE_SERIES, PIE_DATA, ACTIVITIES, LEADS } from '@/lib/mockData';
 import { Card, Pill, Section } from '@/components/ui-kit/Glass';
+import { TopIndustriesWidget, TopCitiesWidget, TodayTasksWidget, FollowUpsWidget, ProfileBanner } from '@/components/dashboard/Widgets';
 
 const ICON = { Sparkles, Flame, PhoneCall, CalendarClock, Users, Target, CircleDollarSign, TrendingUp, FileText, CheckCircle2, Plus };
 const TONE = { brand: 'text-brand-300 bg-brand-500/15', rose: 'text-accent-rose bg-accent-rose/15', amber: 'text-accent-amber bg-accent-amber/15', cyan: 'text-accent-cyan bg-accent-cyan/15', emerald: 'text-accent-emerald bg-accent-emerald/15' };
@@ -11,6 +12,7 @@ const TONE = { brand: 'text-brand-300 bg-brand-500/15', rose: 'text-accent-rose 
 export default function Dashboard() {
   return (
     <div className="space-y-6">
+      <ProfileBanner />
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="relative overflow-hidden rounded-3xl p-6 lg:p-8 glass-strong">
         <div className="absolute -inset-32 bg-aurora opacity-25 blur-3xl pointer-events-none" />
         <div className="relative flex flex-col lg:flex-row lg:items-center justify-between gap-6">
@@ -62,6 +64,14 @@ export default function Dashboard() {
           <div className="mt-4 space-y-3">{['Khan Auto Repair','Reddy Dental','Iyer Realty','Nova Boutique'].map((n,i)=>(<div key={n} className="flex items-center gap-3"><div className="size-9 rounded-xl bg-amber-500/15 text-accent-amber grid place-items-center"><CalendarClock className="size-4"/></div><div className="flex-1"><div className="text-sm font-medium">{n}</div><div className="text-[11px] text-ink-3">Today · {2+i}:{30+i*5} PM · Discovery call</div></div><button className="text-xs text-brand-300">Snooze</button></div>))}</div>
           <div className="mt-5 p-3 rounded-xl glass"><div className="text-xs text-ink-3 mb-1.5">Quick actions</div><div className="grid grid-cols-2 gap-2">{['New lead','Schedule call','Add note','Send proposal'].map(a=>(<button key={a} className="text-xs rounded-lg border border-line py-2 hover:bg-white/5">{a}</button>))}</div></div>
         </Card>
+      </div>
+      <div className="grid lg:grid-cols-2 gap-4">
+        <TopIndustriesWidget />
+        <TopCitiesWidget />
+      </div>
+      <div className="grid lg:grid-cols-2 gap-4">
+        <TodayTasksWidget />
+        <FollowUpsWidget />
       </div>
     </div>
   );

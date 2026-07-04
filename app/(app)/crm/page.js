@@ -6,9 +6,9 @@ import { LEADS } from '@/lib/mockData';
 import { Plus, MoreHorizontal, Phone, Calendar, Star, Filter, Search, KanbanSquare, Table2, CalendarDays } from 'lucide-react';
 
 const STAGES = [
-  { key: 'New', color: '#38BDF8' }, { key: 'Called', color: '#A78BFA' }, { key: 'Call Later', color: '#FBBF24' },
-  { key: 'Interested', color: '#34D399' }, { key: 'Meeting', color: '#22D3EE' }, { key: 'Proposal', color: '#F472B6' },
-  { key: 'Negotiation', color: '#FB923C' }, { key: 'Client', color: '#10B981' }, { key: 'Closed', color: '#64748B' },
+  { key: 'New', color: '#38BDF8' }, { key: 'Contacted', color: '#A78BFA' }, { key: 'Follow Up', color: '#FBBF24' },
+  { key: 'Meeting', color: '#22D3EE' }, { key: 'Proposal', color: '#F472B6' },
+  { key: 'Negotiation', color: '#FB923C' }, { key: 'Won', color: '#10B981' }, { key: 'Lost', color: '#64748B' },
 ];
 
 export default function CRM() {

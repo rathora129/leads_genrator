@@ -3,16 +3,17 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { ChevronLeft, LogOut, Rocket, Sparkles, LayoutDashboard, Building2, Radar, Users, KanbanSquare, BarChart3, LineChart, Bell, Settings, User, LifeBuoy } from 'lucide-react';
+import { ChevronLeft, LogOut, Rocket, Sparkles, LayoutDashboard, Building2, Radar, Users, KanbanSquare, BarChart3, LineChart, Bell, Settings, User, LifeBuoy, MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-const ICONS = { LayoutDashboard, Building2, Radar, Users, KanbanSquare, BarChart3, LineChart, Bell, Settings, User, LifeBuoy };
+const ICONS = { LayoutDashboard, Building2, Radar, Users, KanbanSquare, BarChart3, LineChart, Bell, Settings, User, LifeBuoy, MessageCircle };
 const NAV = [
   { key: 'dashboard', label: 'Dashboard', icon: 'LayoutDashboard', href: '/dashboard' },
   { key: 'workspace', label: 'Workspace', icon: 'Building2', href: '/workspace' },
-  { key: 'lead-finder', label: 'Lead Finder', icon: 'Radar', href: '/lead-finder' },
+  { key: 'lead-finder', label: 'AI Lead Discovery', icon: 'Radar', href: '/lead-finder' },
   { key: 'leads', label: 'Leads', icon: 'Users', href: '/leads' },
-  { key: 'crm', label: 'CRM', icon: 'KanbanSquare', href: '/crm' },
+  { key: 'outreach', label: 'Outreach Center', icon: 'MessageCircle', href: '/outreach' },
+  { key: 'crm', label: 'CRM Pipeline', icon: 'KanbanSquare', href: '/crm' },
   { key: 'reports', label: 'Reports', icon: 'BarChart3', href: '/reports' },
   { key: 'analytics', label: 'Analytics', icon: 'LineChart', href: '/reports' },
   { key: 'notifications', label: 'Notifications', icon: 'Bell', href: '/notifications' },

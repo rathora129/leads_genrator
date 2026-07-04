@@ -6,10 +6,11 @@ import { Card, Pill } from '@/components/ui-kit/Glass';
 import { Empty } from '@/components/ui-kit/Empty';
 import ReminderModal from '@/components/leads/ReminderModal';
 import { LEADS } from '@/lib/mockData';
-import { ArrowLeft, Phone, Mail, Globe, MapPin, Star, MoreHorizontal, ExternalLink, Calendar, CalendarClock, Sparkles, Lock, Plus, MessageSquare, FileText, Clock, CheckCircle2, PhoneCall, Activity, History, Folder, Edit3, Trash2, Send, ShieldAlert, AlertCircle, Building2, User } from 'lucide-react';
+import { AIBusinessAnalysis, WebsiteAnalysis, SalesSuggestions, CompetitorInsights, AIFollowUp, TasksTab } from '@/components/leads/LeadInsights';
+import { ArrowLeft, Phone, Mail, Globe, MapPin, Star, MoreHorizontal, ExternalLink, Calendar, CalendarClock, Sparkles, Lock, Plus, MessageSquare, FileText, Clock, CheckCircle2, PhoneCall, Activity, History, Folder, Edit3, Trash2, Send, ShieldAlert, AlertCircle, Building2, User, ListTodo } from 'lucide-react';
 import { toast } from 'sonner';
 
-const STATUSES = ['New','Called','Call Later','Interested','Meeting','Proposal','Negotiation','Client','Closed'];
+const STATUSES = ['New','Contacted','Follow Up','Meeting','Proposal','Negotiation','Won','Lost'];
 
 export default function LeadDetail({ params }) {
   const { id } = use(params);
@@ -75,7 +76,7 @@ export default function LeadDetail({ params }) {
       </Card>
       <div className="grid lg:grid-cols-[1fr_360px] gap-5">
         <div className="space-y-5">
-          <Card className="p-2 flex flex-wrap gap-1">{[['activity','Activity',Activity],['notes','Private Notes',Lock],['history','History',History],['calls','Call Log',PhoneCall],['files','Files',Folder]].map(([k,l,Ic])=>(<button key={k} onClick={()=>setTab(k)} className={`inline-flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg ${tab===k?'bg-white/[0.07] text-white':'text-ink-3 hover:text-white'}`}><Ic className="size-3.5"/>{l}</button>))}</Card>
+          <Card className="p-2 flex flex-wrap gap-1">{[['activity','Activity',Activity],['tasks','Tasks',ListTodo],['notes','Private Notes',Lock],['history','History',History],['calls','Call Log',PhoneCall],['files','Files',Folder]].map(([k,l,Ic])=>(<button key={k} onClick={()=>setTab(k)} className={`inline-flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg ${tab===k?'bg-white/[0.07] text-white':'text-ink-3 hover:text-white'}`}><Ic className="size-3.5"/>{l}</button>))}</Card>
           {tab==='activity' && (
             <Card className="p-5">
               <div className="flex items-center justify-between mb-4"><div><div className="text-sm font-semibold">Activity timeline</div><div className="text-xs text-ink-3">Every touchpoint, in order</div></div><Pill tone="muted">{timeline.length} events</Pill></div>
@@ -87,6 +88,7 @@ export default function LeadDetail({ params }) {
                 </motion.div>);})}
               </div>
             </Card>)}
+          {tab==='tasks' && (<TasksTab leadId={lead.id}/>)}
           {tab==='notes' && (
             <Card className="p-5">
               <div className="flex items-center justify-between mb-4"><div><div className="text-sm font-semibold flex items-center gap-2"><Lock className="size-3.5 text-accent-amber"/>Private notes</div><div className="text-xs text-ink-3">Only you can see these. AI cannot read, modify or suggest from them.</div></div><Pill tone="amber"><ShieldAlert className="size-3"/>Private</Pill></div>
@@ -121,6 +123,11 @@ export default function LeadDetail({ params }) {
             </div>
             <button onClick={()=>setAiOpen(true)} className="mt-3 w-full text-xs rounded-xl bg-brand-500 hover:bg-brand-600 text-white px-3 py-2.5 inline-flex items-center justify-center gap-1.5 shadow-glow font-semibold"><Sparkles className="size-3.5"/>Re-run AI on this lead</button>
           </Card>
+          <AIFollowUp lead={lead}/>
+          <AIBusinessAnalysis lead={lead}/>
+          <WebsiteAnalysis lead={lead}/>
+          <SalesSuggestions lead={lead}/>
+          <CompetitorInsights lead={lead}/>
         </div>
       </div>
       <ReminderModal open={reminder} onClose={()=>setReminder(false)} lead={lead}/>
